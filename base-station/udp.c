@@ -83,6 +83,7 @@
         for(int i=0;i<res;i++)
             server_buffer[i] = toupper(server_buffer[i]);
         server_buffer[res] = '\0';
+        //printf("%s\n",server_buffer);
         sendto(server_socket, server_buffer, res, 0, (struct sockaddr *)&src, sizeof(src));
     }
 }
@@ -135,7 +136,8 @@ static int udp_send(char *addr_str, char *port_str, char *data, unsigned int num
             close(s);
         }
         else {
-            printf("%d Received from server: %s\n",nBytes,server_data);
+            server_data[nBytes] = '\0';
+            printf("%d bytes received from server: %s\n",nBytes,server_data);
             //server_data = "\0";
             usleep(delay);
         }
