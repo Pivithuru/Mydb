@@ -1,74 +1,61 @@
 %{
 #include <stdio.h>
 #include "y.tab.h"
+
+void yyerror(char *);
+int numchar = 1;
 %}
+
 %%
-create					{printf("CREATE1\n");return CREATE;}
-CREATE 					{printf("CREATE2\n");return CREATE;}
-table 					{printf("TABLE1\n");return TABLE;}
-TABLE 					{printf("TABLE2\n");return TABLE;}
-column 					{printf("COLUMN1\n");return COLUMN;}
-COLUMN 					{printf("COLUMN2\n");return COLUMN;}
-in 						{printf("IN1\n");return IN;}
-IN 						{printf("IN2\n");return IN;}
-type					{printf("TYPE1\n");return TYPE;}
-TYPE 					{printf("TYPE2\n");return TYPE;}
-insert 					{printf("INSERT1\n");return INSERT;}
-INSERT 					{printf("INSERT2\n");return INSERT;}
-into 					{printf("INTO1\n");return INTO;}
-INTO 					{printf("INTO2\n");return INTO;}
-values					{printf("VALUES1\n");return VALUES;}
-VALUES 					{printf("VALUES2\n");return VALUES;}
-select					{printf("SELECT1\n");return SELECT;}
-SELECT 					{printf("SELECT2\n");return SELECT;}
-from 					{printf("FROM1\n");return FROM;}
-FROM 					{printf("FROM2\n");return FROM;}
-where					{printf("WHERE1\n");return WHERE;}
-WHERE 					{printf("WHERE2\n");return WHERE;}
-delete 					{printf("DELETE1\n");return DELETE;}
-DELETE 					{printf("DELETE2\n");return DELETE;}
-string					{printf("STRING1\n");return STRING;}
-STRING 					{printf("STRING2\n");return STRING;}
+create					{printf("CREATE\n");numchar+=6;return CREATE;}
+table 					{printf("TABLE\n");numchar+=5;return TABLE;}
+column 					{printf("COLUMN\n");numchar+=6;return COLUMN;}
+in 						{printf("IN\n");numchar+=2;return IN;}
+type					{printf("TYPE\n");numchar+=4;return TYPE;}
+insert 					{printf("INSERT\n");numchar+=6;return INSERT;}
+into 					{printf("INTO\n");numchar+=4;return INTO;}
+values					{printf("VALUES\n");numchar+=6;return VALUES;}
+select					{printf("SELECT\n");numchar+=6;return SELECT;}
+from 					{printf("FROM\n");numchar+=4;return FROM;}
+where					{printf("WHERE\n");numchar+=5;return WHERE;}
+delete 					{printf("DELETE\n");numchar+=6;return DELETE;}
 
-and 					{printf("AND1\n");return AND;}
-AND 					{printf("AND2\n");return AND;}
-or 						{printf("OR1\n");return OR;}
-OR 						{printf("OR2\n");return OR;}
-not 					{printf("NOT1\n");return NOT;}
-NOT 					{printf("NOT2\n");return NOT;}
-like 					{printf("LIKE1\n");return LIKE;}
-LIKE 					{printf("LIKE2\n");return LIKE;}
+int						{printf("INTTYPE\n");numchar+=3;return INTTYPE;}
+double					{printf("DOUBLETYPE\n");numchar+=6;return DOUBLETYPE;}
+string					{printf("STRINGTYPE\n");numchar+=6;return STRINGTYPE;}
 
-max 					{printf("MAX1\n");return MAX;}
-MAX 					{printf("MAX2\n");return MAX;}
-min 					{printf("MIN1\n");return MIN;}
-MIN 					{printf("MIN2\n");return MIN;}
-sum 					{printf("SUM1\n");return SUM;}
-SUM 					{printf("SUM2\n");return SUM;}
-avg 					{printf("AVG1\n");return AVG;}
-AVG 					{printf("AVG2\n");return AVG;}
-count 					{printf("COUNT1\n");return COUNT;}
-COUNT 					{printf("COUNT2\n");return COUNT;}
+and 					{printf("AND\n");numchar+=3;return AND;}
+or 						{printf("OR\n");numchar+=2;return OR;}
+not 					{printf("NOT\n");numchar+=3;return NOT;}
+like 					{printf("LIKE\n");numchar+=4;return LIKE;}
 
-[/*]					{printf("ALL\n");return ALL;}
-","						{printf("COMMA\n");return COMMA;}
-"'"						{printf("SINGLE QUOTE\n");return SIQT;}
-"("						{printf("OPEN BRACKET\n");return OPBR;}
-")"						{printf("CLOSE BRACKET\n");return CLBR;}
-";"						{printf("SEMICOLON\n");return SECL;}
+max 					{printf("MAX\n");numchar+=3;return MAX;}
+min 					{printf("MIN\n");numchar+=3;return MIN;}
+sum 					{printf("SUM\n");numchar+=3;return SUM;}
+avg 					{printf("AVG\n");numchar+=3;return AVG;}
+count 					{printf("COUNT\n");numchar+=5;return COUNT;}
 
-"="						{printf("EQUAL\n");return EQ;}
-">"						{printf("GREATER THAN\n");return GT;}
-"<"						{printf("LESS THAN\n");return LT;}
-">="					{printf("GREATER THAN OR EQUAL\n");return GE;}
-"<="					{printf("LESS THAN OR EQUAL\n");return LE;}
-"!="					{printf("NOT EQUAL\n");return NE;}
+[/*]					{printf("ALL\n");numchar+=1;return ALL;}
+","						{printf("COMMA\n");numchar+=1;return COMMA;}
+"'"						{printf("SINGLE QUOTE\n");numchar+=1;return SIQT;}
+"("						{printf("OPEN BRACKET\n");numchar+=1;return OPBR;}
+")"						{printf("CLOSE BRACKET\n");numchar+=1;return CLBR;}
+";"						{printf("SEMICOLON\n");numchar+=1;return SECL;}
 
-[A-Za-z][A-Za-z0-9_]*	{printf("IDENTIFIER\n");return IDENTIFIER;}
-[0-9]+					{printf("INT\n");return INTNUM;}
-[0-9]+"."[0-9]* 		{printf("DOUBLE\n");return DOUBLE;}
-[ \t\n\r]				;
-.						{printf("UNRECOGNIZED CHARACTER\n");}
+"="						{printf("EQUAL\n");numchar+=1;return EQ;}
+">"						{printf("GREATER THAN\n");numchar+1;return GT;}
+"<"						{printf("LESS THAN\n");numchar+=1;return LT;}
+">="					{printf("GREATER THAN OR EQUAL\n");numchar+=2;return GE;}
+"<="					{printf("LESS THAN OR EQUAL\n");numchar+=2;return LE;}
+"!="					{printf("NOT EQUAL\n");numchar+=2;return NE;}
+
+[A-Za-z][A-Za-z0-9_]*	{printf("IDENTIFIER\n");numchar+=yyleng;printf("%d\n",numchar);yylval.string = yytext;return IDENTIFIER;}
+[0-9]+					{printf("INT\n");numchar+=yyleng;printf("%d\n",numchar);yylval.iValue = atoi(yytext);return INTNUM;}
+[0-9]+"."[0-9]* 		{printf("DOUBLE\n");numchar+=yyleng;printf("%d\n",numchar);yylval.iValue = atof(yytext);return DOUBLE;}
+
+[ \t\r]					{numchar+=1;}
+[\n]					{yylineno++;numchar=1;}
+.						{yyerror("UNRECOGNIZED CHARACTER ");}
 %%	
 
 int yywrap() {

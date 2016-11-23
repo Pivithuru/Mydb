@@ -1,0 +1,1225 @@
+Terminals unused in grammar
+
+   NOT
+   TYPE
+
+
+Grammar
+
+    0 $accept: sql_list $end
+
+    1 sql_list: sql
+    2         | sql sql_list
+
+    3 sql: create_statement
+    4    | insert_statement
+    5    | select_statement
+    6    | delete_statement
+
+    7 create_statement: create_table
+    8                 | create_column
+
+    9 create_table: CREATE TABLE table_name SECL
+
+   10 table_name: IDENTIFIER
+
+   11 create_column: CREATE COLUMN column_name column_type IN table_name SECL
+
+   12 column_name: IDENTIFIER
+
+   13 column_type: INTTYPE
+   14            | DOUBLETYPE
+   15            | string_type
+
+   16 string_type: STRINGTYPE OPBR size CLBR
+
+   17 size: INTNUM
+
+   18 insert_statement: INSERT INTO table_name column_comma_list VALUES value_comma_list SECL
+   19                 | INSERT INTO table_name VALUES value_comma_list SECL
+
+   20 column_comma_list: OPBR column_list CLBR
+
+   21 column_list: column
+   22            | column_list COMMA column
+
+   23 column: IDENTIFIER
+
+   24 value_comma_list: OPBR value_list CLBR
+
+   25 value_list: value
+   26           | value_list COMMA value
+
+   27 value: INTNUM
+   28      | DOUBLE
+   29      | SIQT IDENTIFIER SIQT
+
+   30 select_statement: SELECT ALL FROM table_name SECL
+   31                 | SELECT ALL FROM table_name where_clause SECL
+   32                 | SELECT column_comma_list FROM table_name SECL
+   33                 | SELECT column_comma_list FROM table_name where_clause SECL
+   34                 | SELECT aggregate_function FROM table_name SECL
+   35                 | SELECT aggregate_function FROM table_name where_clause SECL
+
+   36 where_clause: WHERE where_condition
+
+   37 where_condition: comparison
+   38                | where_condition logic_function comparison
+
+   39 comparison: lval compare_function rval
+
+   40 lval: IDENTIFIER
+
+   41 rval: INTNUM
+   42     | DOUBLE
+   43     | SIQT IDENTIFIER SIQT
+
+   44 logic_function: AND
+   45               | OR
+
+   46 compare_function: EQ
+   47                 | NE
+   48                 | LT
+   49                 | GT
+   50                 | LE
+   51                 | GE
+   52                 | LIKE
+
+   53 aggregate_function: func_name OPBR column CLBR
+   54                   | count_func OPBR column CLBR
+   55                   | count_func OPBR ALL CLBR
+
+   56 count_func: COUNT
+
+   57 func_name: MIN
+   58          | MAX
+   59          | SUM
+   60          | AVG
+
+   61 delete_statement: DELETE column FROM table_name SECL
+   62                 | DELETE column FROM table_name where_clause SECL
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+AND (258) 44
+OR (259) 45
+NOT (260)
+GE (261) 51
+LE (262) 50
+EQ (263) 46
+NE (264) 47
+GT (265) 49
+LT (266) 48
+CREATE (267) 9 11
+TABLE (268) 9
+COLUMN (269) 11
+TYPE (270)
+INSERT (271) 18 19
+INTO (272) 18 19
+VALUES (273) 18 19
+SELECT (274) 30 31 32 33 34 35
+FROM (275) 30 31 32 33 34 35 61 62
+WHERE (276) 36
+DELETE (277) 61 62
+LIKE (278) 52
+STRINGTYPE (279) 16
+INTTYPE (280) 13
+DOUBLETYPE (281) 14
+IN (282) 11
+MAX (283) 58
+MIN (284) 57
+SUM (285) 59
+AVG (286) 60
+COUNT (287) 56
+ALL (288) 30 31 55
+COMMA (289) 22 26
+SIQT (290) 29 43
+OPBR (291) 16 20 24 53 54 55
+CLBR (292) 16 20 24 53 54 55
+SECL (293) 9 11 18 19 30 31 32 33 34 35 61 62
+IDENTIFIER (294) 10 12 23 29 40 43
+INTNUM (295) 17 27 41
+DOUBLE (296) 28 42
+
+
+Nonterminals, with rules where they appear
+
+$accept (42)
+    on left: 0
+sql_list (43)
+    on left: 1 2, on right: 0 2
+sql (44)
+    on left: 3 4 5 6, on right: 1 2
+create_statement (45)
+    on left: 7 8, on right: 3
+create_table (46)
+    on left: 9, on right: 7
+table_name (47)
+    on left: 10, on right: 9 11 18 19 30 31 32 33 34 35 61 62
+create_column (48)
+    on left: 11, on right: 8
+column_name (49)
+    on left: 12, on right: 11
+column_type (50)
+    on left: 13 14 15, on right: 11
+string_type (51)
+    on left: 16, on right: 15
+size (52)
+    on left: 17, on right: 16
+insert_statement (53)
+    on left: 18 19, on right: 4
+column_comma_list (54)
+    on left: 20, on right: 18 32 33
+column_list (55)
+    on left: 21 22, on right: 20 22
+column (56)
+    on left: 23, on right: 21 22 53 54 61 62
+value_comma_list (57)
+    on left: 24, on right: 18 19
+value_list (58)
+    on left: 25 26, on right: 24 26
+value (59)
+    on left: 27 28 29, on right: 25 26
+select_statement (60)
+    on left: 30 31 32 33 34 35, on right: 5
+where_clause (61)
+    on left: 36, on right: 31 33 35 62
+where_condition (62)
+    on left: 37 38, on right: 36 38
+comparison (63)
+    on left: 39, on right: 37 38
+lval (64)
+    on left: 40, on right: 39
+rval (65)
+    on left: 41 42 43, on right: 39
+logic_function (66)
+    on left: 44 45, on right: 38
+compare_function (67)
+    on left: 46 47 48 49 50 51 52, on right: 39
+aggregate_function (68)
+    on left: 53 54 55, on right: 34 35
+count_func (69)
+    on left: 56, on right: 54 55
+func_name (70)
+    on left: 57 58 59 60, on right: 53
+delete_statement (71)
+    on left: 61 62, on right: 6
+
+
+State 0
+
+    0 $accept: . sql_list $end
+
+    CREATE  shift, and go to state 1
+    INSERT  shift, and go to state 2
+    SELECT  shift, and go to state 3
+    DELETE  shift, and go to state 4
+
+    sql_list          go to state 5
+    sql               go to state 6
+    create_statement  go to state 7
+    create_table      go to state 8
+    create_column     go to state 9
+    insert_statement  go to state 10
+    select_statement  go to state 11
+    delete_statement  go to state 12
+
+
+State 1
+
+    9 create_table: CREATE . TABLE table_name SECL
+   11 create_column: CREATE . COLUMN column_name column_type IN table_name SECL
+
+    TABLE   shift, and go to state 13
+    COLUMN  shift, and go to state 14
+
+
+State 2
+
+   18 insert_statement: INSERT . INTO table_name column_comma_list VALUES value_comma_list SECL
+   19                 | INSERT . INTO table_name VALUES value_comma_list SECL
+
+    INTO  shift, and go to state 15
+
+
+State 3
+
+   30 select_statement: SELECT . ALL FROM table_name SECL
+   31                 | SELECT . ALL FROM table_name where_clause SECL
+   32                 | SELECT . column_comma_list FROM table_name SECL
+   33                 | SELECT . column_comma_list FROM table_name where_clause SECL
+   34                 | SELECT . aggregate_function FROM table_name SECL
+   35                 | SELECT . aggregate_function FROM table_name where_clause SECL
+
+    MAX    shift, and go to state 16
+    MIN    shift, and go to state 17
+    SUM    shift, and go to state 18
+    AVG    shift, and go to state 19
+    COUNT  shift, and go to state 20
+    ALL    shift, and go to state 21
+    OPBR   shift, and go to state 22
+
+    column_comma_list   go to state 23
+    aggregate_function  go to state 24
+    count_func          go to state 25
+    func_name           go to state 26
+
+
+State 4
+
+   61 delete_statement: DELETE . column FROM table_name SECL
+   62                 | DELETE . column FROM table_name where_clause SECL
+
+    IDENTIFIER  shift, and go to state 27
+
+    column  go to state 28
+
+
+State 5
+
+    0 $accept: sql_list . $end
+
+    $end  shift, and go to state 29
+
+
+State 6
+
+    1 sql_list: sql .
+    2         | sql . sql_list
+
+    CREATE  shift, and go to state 1
+    INSERT  shift, and go to state 2
+    SELECT  shift, and go to state 3
+    DELETE  shift, and go to state 4
+
+    $default  reduce using rule 1 (sql_list)
+
+    sql_list          go to state 30
+    sql               go to state 6
+    create_statement  go to state 7
+    create_table      go to state 8
+    create_column     go to state 9
+    insert_statement  go to state 10
+    select_statement  go to state 11
+    delete_statement  go to state 12
+
+
+State 7
+
+    3 sql: create_statement .
+
+    $default  reduce using rule 3 (sql)
+
+
+State 8
+
+    7 create_statement: create_table .
+
+    $default  reduce using rule 7 (create_statement)
+
+
+State 9
+
+    8 create_statement: create_column .
+
+    $default  reduce using rule 8 (create_statement)
+
+
+State 10
+
+    4 sql: insert_statement .
+
+    $default  reduce using rule 4 (sql)
+
+
+State 11
+
+    5 sql: select_statement .
+
+    $default  reduce using rule 5 (sql)
+
+
+State 12
+
+    6 sql: delete_statement .
+
+    $default  reduce using rule 6 (sql)
+
+
+State 13
+
+    9 create_table: CREATE TABLE . table_name SECL
+
+    IDENTIFIER  shift, and go to state 31
+
+    table_name  go to state 32
+
+
+State 14
+
+   11 create_column: CREATE COLUMN . column_name column_type IN table_name SECL
+
+    IDENTIFIER  shift, and go to state 33
+
+    column_name  go to state 34
+
+
+State 15
+
+   18 insert_statement: INSERT INTO . table_name column_comma_list VALUES value_comma_list SECL
+   19                 | INSERT INTO . table_name VALUES value_comma_list SECL
+
+    IDENTIFIER  shift, and go to state 31
+
+    table_name  go to state 35
+
+
+State 16
+
+   58 func_name: MAX .
+
+    $default  reduce using rule 58 (func_name)
+
+
+State 17
+
+   57 func_name: MIN .
+
+    $default  reduce using rule 57 (func_name)
+
+
+State 18
+
+   59 func_name: SUM .
+
+    $default  reduce using rule 59 (func_name)
+
+
+State 19
+
+   60 func_name: AVG .
+
+    $default  reduce using rule 60 (func_name)
+
+
+State 20
+
+   56 count_func: COUNT .
+
+    $default  reduce using rule 56 (count_func)
+
+
+State 21
+
+   30 select_statement: SELECT ALL . FROM table_name SECL
+   31                 | SELECT ALL . FROM table_name where_clause SECL
+
+    FROM  shift, and go to state 36
+
+
+State 22
+
+   20 column_comma_list: OPBR . column_list CLBR
+
+    IDENTIFIER  shift, and go to state 27
+
+    column_list  go to state 37
+    column       go to state 38
+
+
+State 23
+
+   32 select_statement: SELECT column_comma_list . FROM table_name SECL
+   33                 | SELECT column_comma_list . FROM table_name where_clause SECL
+
+    FROM  shift, and go to state 39
+
+
+State 24
+
+   34 select_statement: SELECT aggregate_function . FROM table_name SECL
+   35                 | SELECT aggregate_function . FROM table_name where_clause SECL
+
+    FROM  shift, and go to state 40
+
+
+State 25
+
+   54 aggregate_function: count_func . OPBR column CLBR
+   55                   | count_func . OPBR ALL CLBR
+
+    OPBR  shift, and go to state 41
+
+
+State 26
+
+   53 aggregate_function: func_name . OPBR column CLBR
+
+    OPBR  shift, and go to state 42
+
+
+State 27
+
+   23 column: IDENTIFIER .
+
+    $default  reduce using rule 23 (column)
+
+
+State 28
+
+   61 delete_statement: DELETE column . FROM table_name SECL
+   62                 | DELETE column . FROM table_name where_clause SECL
+
+    FROM  shift, and go to state 43
+
+
+State 29
+
+    0 $accept: sql_list $end .
+
+    $default  accept
+
+
+State 30
+
+    2 sql_list: sql sql_list .
+
+    $default  reduce using rule 2 (sql_list)
+
+
+State 31
+
+   10 table_name: IDENTIFIER .
+
+    $default  reduce using rule 10 (table_name)
+
+
+State 32
+
+    9 create_table: CREATE TABLE table_name . SECL
+
+    SECL  shift, and go to state 44
+
+
+State 33
+
+   12 column_name: IDENTIFIER .
+
+    $default  reduce using rule 12 (column_name)
+
+
+State 34
+
+   11 create_column: CREATE COLUMN column_name . column_type IN table_name SECL
+
+    STRINGTYPE  shift, and go to state 45
+    INTTYPE     shift, and go to state 46
+    DOUBLETYPE  shift, and go to state 47
+
+    column_type  go to state 48
+    string_type  go to state 49
+
+
+State 35
+
+   18 insert_statement: INSERT INTO table_name . column_comma_list VALUES value_comma_list SECL
+   19                 | INSERT INTO table_name . VALUES value_comma_list SECL
+
+    VALUES  shift, and go to state 50
+    OPBR    shift, and go to state 22
+
+    column_comma_list  go to state 51
+
+
+State 36
+
+   30 select_statement: SELECT ALL FROM . table_name SECL
+   31                 | SELECT ALL FROM . table_name where_clause SECL
+
+    IDENTIFIER  shift, and go to state 31
+
+    table_name  go to state 52
+
+
+State 37
+
+   20 column_comma_list: OPBR column_list . CLBR
+   22 column_list: column_list . COMMA column
+
+    COMMA  shift, and go to state 53
+    CLBR   shift, and go to state 54
+
+
+State 38
+
+   21 column_list: column .
+
+    $default  reduce using rule 21 (column_list)
+
+
+State 39
+
+   32 select_statement: SELECT column_comma_list FROM . table_name SECL
+   33                 | SELECT column_comma_list FROM . table_name where_clause SECL
+
+    IDENTIFIER  shift, and go to state 31
+
+    table_name  go to state 55
+
+
+State 40
+
+   34 select_statement: SELECT aggregate_function FROM . table_name SECL
+   35                 | SELECT aggregate_function FROM . table_name where_clause SECL
+
+    IDENTIFIER  shift, and go to state 31
+
+    table_name  go to state 56
+
+
+State 41
+
+   54 aggregate_function: count_func OPBR . column CLBR
+   55                   | count_func OPBR . ALL CLBR
+
+    ALL         shift, and go to state 57
+    IDENTIFIER  shift, and go to state 27
+
+    column  go to state 58
+
+
+State 42
+
+   53 aggregate_function: func_name OPBR . column CLBR
+
+    IDENTIFIER  shift, and go to state 27
+
+    column  go to state 59
+
+
+State 43
+
+   61 delete_statement: DELETE column FROM . table_name SECL
+   62                 | DELETE column FROM . table_name where_clause SECL
+
+    IDENTIFIER  shift, and go to state 31
+
+    table_name  go to state 60
+
+
+State 44
+
+    9 create_table: CREATE TABLE table_name SECL .
+
+    $default  reduce using rule 9 (create_table)
+
+
+State 45
+
+   16 string_type: STRINGTYPE . OPBR size CLBR
+
+    OPBR  shift, and go to state 61
+
+
+State 46
+
+   13 column_type: INTTYPE .
+
+    $default  reduce using rule 13 (column_type)
+
+
+State 47
+
+   14 column_type: DOUBLETYPE .
+
+    $default  reduce using rule 14 (column_type)
+
+
+State 48
+
+   11 create_column: CREATE COLUMN column_name column_type . IN table_name SECL
+
+    IN  shift, and go to state 62
+
+
+State 49
+
+   15 column_type: string_type .
+
+    $default  reduce using rule 15 (column_type)
+
+
+State 50
+
+   19 insert_statement: INSERT INTO table_name VALUES . value_comma_list SECL
+
+    OPBR  shift, and go to state 63
+
+    value_comma_list  go to state 64
+
+
+State 51
+
+   18 insert_statement: INSERT INTO table_name column_comma_list . VALUES value_comma_list SECL
+
+    VALUES  shift, and go to state 65
+
+
+State 52
+
+   30 select_statement: SELECT ALL FROM table_name . SECL
+   31                 | SELECT ALL FROM table_name . where_clause SECL
+
+    WHERE  shift, and go to state 66
+    SECL   shift, and go to state 67
+
+    where_clause  go to state 68
+
+
+State 53
+
+   22 column_list: column_list COMMA . column
+
+    IDENTIFIER  shift, and go to state 27
+
+    column  go to state 69
+
+
+State 54
+
+   20 column_comma_list: OPBR column_list CLBR .
+
+    $default  reduce using rule 20 (column_comma_list)
+
+
+State 55
+
+   32 select_statement: SELECT column_comma_list FROM table_name . SECL
+   33                 | SELECT column_comma_list FROM table_name . where_clause SECL
+
+    WHERE  shift, and go to state 66
+    SECL   shift, and go to state 70
+
+    where_clause  go to state 71
+
+
+State 56
+
+   34 select_statement: SELECT aggregate_function FROM table_name . SECL
+   35                 | SELECT aggregate_function FROM table_name . where_clause SECL
+
+    WHERE  shift, and go to state 66
+    SECL   shift, and go to state 72
+
+    where_clause  go to state 73
+
+
+State 57
+
+   55 aggregate_function: count_func OPBR ALL . CLBR
+
+    CLBR  shift, and go to state 74
+
+
+State 58
+
+   54 aggregate_function: count_func OPBR column . CLBR
+
+    CLBR  shift, and go to state 75
+
+
+State 59
+
+   53 aggregate_function: func_name OPBR column . CLBR
+
+    CLBR  shift, and go to state 76
+
+
+State 60
+
+   61 delete_statement: DELETE column FROM table_name . SECL
+   62                 | DELETE column FROM table_name . where_clause SECL
+
+    WHERE  shift, and go to state 66
+    SECL   shift, and go to state 77
+
+    where_clause  go to state 78
+
+
+State 61
+
+   16 string_type: STRINGTYPE OPBR . size CLBR
+
+    INTNUM  shift, and go to state 79
+
+    size  go to state 80
+
+
+State 62
+
+   11 create_column: CREATE COLUMN column_name column_type IN . table_name SECL
+
+    IDENTIFIER  shift, and go to state 31
+
+    table_name  go to state 81
+
+
+State 63
+
+   24 value_comma_list: OPBR . value_list CLBR
+
+    SIQT    shift, and go to state 82
+    INTNUM  shift, and go to state 83
+    DOUBLE  shift, and go to state 84
+
+    value_list  go to state 85
+    value       go to state 86
+
+
+State 64
+
+   19 insert_statement: INSERT INTO table_name VALUES value_comma_list . SECL
+
+    SECL  shift, and go to state 87
+
+
+State 65
+
+   18 insert_statement: INSERT INTO table_name column_comma_list VALUES . value_comma_list SECL
+
+    OPBR  shift, and go to state 63
+
+    value_comma_list  go to state 88
+
+
+State 66
+
+   36 where_clause: WHERE . where_condition
+
+    IDENTIFIER  shift, and go to state 89
+
+    where_condition  go to state 90
+    comparison       go to state 91
+    lval             go to state 92
+
+
+State 67
+
+   30 select_statement: SELECT ALL FROM table_name SECL .
+
+    $default  reduce using rule 30 (select_statement)
+
+
+State 68
+
+   31 select_statement: SELECT ALL FROM table_name where_clause . SECL
+
+    SECL  shift, and go to state 93
+
+
+State 69
+
+   22 column_list: column_list COMMA column .
+
+    $default  reduce using rule 22 (column_list)
+
+
+State 70
+
+   32 select_statement: SELECT column_comma_list FROM table_name SECL .
+
+    $default  reduce using rule 32 (select_statement)
+
+
+State 71
+
+   33 select_statement: SELECT column_comma_list FROM table_name where_clause . SECL
+
+    SECL  shift, and go to state 94
+
+
+State 72
+
+   34 select_statement: SELECT aggregate_function FROM table_name SECL .
+
+    $default  reduce using rule 34 (select_statement)
+
+
+State 73
+
+   35 select_statement: SELECT aggregate_function FROM table_name where_clause . SECL
+
+    SECL  shift, and go to state 95
+
+
+State 74
+
+   55 aggregate_function: count_func OPBR ALL CLBR .
+
+    $default  reduce using rule 55 (aggregate_function)
+
+
+State 75
+
+   54 aggregate_function: count_func OPBR column CLBR .
+
+    $default  reduce using rule 54 (aggregate_function)
+
+
+State 76
+
+   53 aggregate_function: func_name OPBR column CLBR .
+
+    $default  reduce using rule 53 (aggregate_function)
+
+
+State 77
+
+   61 delete_statement: DELETE column FROM table_name SECL .
+
+    $default  reduce using rule 61 (delete_statement)
+
+
+State 78
+
+   62 delete_statement: DELETE column FROM table_name where_clause . SECL
+
+    SECL  shift, and go to state 96
+
+
+State 79
+
+   17 size: INTNUM .
+
+    $default  reduce using rule 17 (size)
+
+
+State 80
+
+   16 string_type: STRINGTYPE OPBR size . CLBR
+
+    CLBR  shift, and go to state 97
+
+
+State 81
+
+   11 create_column: CREATE COLUMN column_name column_type IN table_name . SECL
+
+    SECL  shift, and go to state 98
+
+
+State 82
+
+   29 value: SIQT . IDENTIFIER SIQT
+
+    IDENTIFIER  shift, and go to state 99
+
+
+State 83
+
+   27 value: INTNUM .
+
+    $default  reduce using rule 27 (value)
+
+
+State 84
+
+   28 value: DOUBLE .
+
+    $default  reduce using rule 28 (value)
+
+
+State 85
+
+   24 value_comma_list: OPBR value_list . CLBR
+   26 value_list: value_list . COMMA value
+
+    COMMA  shift, and go to state 100
+    CLBR   shift, and go to state 101
+
+
+State 86
+
+   25 value_list: value .
+
+    $default  reduce using rule 25 (value_list)
+
+
+State 87
+
+   19 insert_statement: INSERT INTO table_name VALUES value_comma_list SECL .
+
+    $default  reduce using rule 19 (insert_statement)
+
+
+State 88
+
+   18 insert_statement: INSERT INTO table_name column_comma_list VALUES value_comma_list . SECL
+
+    SECL  shift, and go to state 102
+
+
+State 89
+
+   40 lval: IDENTIFIER .
+
+    $default  reduce using rule 40 (lval)
+
+
+State 90
+
+   36 where_clause: WHERE where_condition .
+   38 where_condition: where_condition . logic_function comparison
+
+    AND  shift, and go to state 103
+    OR   shift, and go to state 104
+
+    $default  reduce using rule 36 (where_clause)
+
+    logic_function  go to state 105
+
+
+State 91
+
+   37 where_condition: comparison .
+
+    $default  reduce using rule 37 (where_condition)
+
+
+State 92
+
+   39 comparison: lval . compare_function rval
+
+    GE    shift, and go to state 106
+    LE    shift, and go to state 107
+    EQ    shift, and go to state 108
+    NE    shift, and go to state 109
+    GT    shift, and go to state 110
+    LT    shift, and go to state 111
+    LIKE  shift, and go to state 112
+
+    compare_function  go to state 113
+
+
+State 93
+
+   31 select_statement: SELECT ALL FROM table_name where_clause SECL .
+
+    $default  reduce using rule 31 (select_statement)
+
+
+State 94
+
+   33 select_statement: SELECT column_comma_list FROM table_name where_clause SECL .
+
+    $default  reduce using rule 33 (select_statement)
+
+
+State 95
+
+   35 select_statement: SELECT aggregate_function FROM table_name where_clause SECL .
+
+    $default  reduce using rule 35 (select_statement)
+
+
+State 96
+
+   62 delete_statement: DELETE column FROM table_name where_clause SECL .
+
+    $default  reduce using rule 62 (delete_statement)
+
+
+State 97
+
+   16 string_type: STRINGTYPE OPBR size CLBR .
+
+    $default  reduce using rule 16 (string_type)
+
+
+State 98
+
+   11 create_column: CREATE COLUMN column_name column_type IN table_name SECL .
+
+    $default  reduce using rule 11 (create_column)
+
+
+State 99
+
+   29 value: SIQT IDENTIFIER . SIQT
+
+    SIQT  shift, and go to state 114
+
+
+State 100
+
+   26 value_list: value_list COMMA . value
+
+    SIQT    shift, and go to state 82
+    INTNUM  shift, and go to state 83
+    DOUBLE  shift, and go to state 84
+
+    value  go to state 115
+
+
+State 101
+
+   24 value_comma_list: OPBR value_list CLBR .
+
+    $default  reduce using rule 24 (value_comma_list)
+
+
+State 102
+
+   18 insert_statement: INSERT INTO table_name column_comma_list VALUES value_comma_list SECL .
+
+    $default  reduce using rule 18 (insert_statement)
+
+
+State 103
+
+   44 logic_function: AND .
+
+    $default  reduce using rule 44 (logic_function)
+
+
+State 104
+
+   45 logic_function: OR .
+
+    $default  reduce using rule 45 (logic_function)
+
+
+State 105
+
+   38 where_condition: where_condition logic_function . comparison
+
+    IDENTIFIER  shift, and go to state 89
+
+    comparison  go to state 116
+    lval        go to state 92
+
+
+State 106
+
+   51 compare_function: GE .
+
+    $default  reduce using rule 51 (compare_function)
+
+
+State 107
+
+   50 compare_function: LE .
+
+    $default  reduce using rule 50 (compare_function)
+
+
+State 108
+
+   46 compare_function: EQ .
+
+    $default  reduce using rule 46 (compare_function)
+
+
+State 109
+
+   47 compare_function: NE .
+
+    $default  reduce using rule 47 (compare_function)
+
+
+State 110
+
+   49 compare_function: GT .
+
+    $default  reduce using rule 49 (compare_function)
+
+
+State 111
+
+   48 compare_function: LT .
+
+    $default  reduce using rule 48 (compare_function)
+
+
+State 112
+
+   52 compare_function: LIKE .
+
+    $default  reduce using rule 52 (compare_function)
+
+
+State 113
+
+   39 comparison: lval compare_function . rval
+
+    SIQT    shift, and go to state 117
+    INTNUM  shift, and go to state 118
+    DOUBLE  shift, and go to state 119
+
+    rval  go to state 120
+
+
+State 114
+
+   29 value: SIQT IDENTIFIER SIQT .
+
+    $default  reduce using rule 29 (value)
+
+
+State 115
+
+   26 value_list: value_list COMMA value .
+
+    $default  reduce using rule 26 (value_list)
+
+
+State 116
+
+   38 where_condition: where_condition logic_function comparison .
+
+    $default  reduce using rule 38 (where_condition)
+
+
+State 117
+
+   43 rval: SIQT . IDENTIFIER SIQT
+
+    IDENTIFIER  shift, and go to state 121
+
+
+State 118
+
+   41 rval: INTNUM .
+
+    $default  reduce using rule 41 (rval)
+
+
+State 119
+
+   42 rval: DOUBLE .
+
+    $default  reduce using rule 42 (rval)
+
+
+State 120
+
+   39 comparison: lval compare_function rval .
+
+    $default  reduce using rule 39 (comparison)
+
+
+State 121
+
+   43 rval: SIQT IDENTIFIER . SIQT
+
+    SIQT  shift, and go to state 122
+
+
+State 122
+
+   43 rval: SIQT IDENTIFIER SIQT .
+
+    $default  reduce using rule 43 (rval)

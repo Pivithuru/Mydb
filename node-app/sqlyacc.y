@@ -4,21 +4,36 @@
 %}
 
 %{
+extern int yylineno;
+extern int numchar;
 void yyerror(char *);
 %}
 
-%left AND OR NOT
-%left EQ NE LT GT LE GE
+%union {
+    int iValue;                 /* integer value */
+    char *string;                /* symbol table index */
+    double dvalue;				/* double value */
+}
 
-%token CREATE TABLE COLUMN TYPE INSERT INTO VALUES SELECT FROM WHERE DELETE LIKE STRING IN
+%left AND OR NOT
+%left GE LE EQ NE GT LT
+
+%token CREATE TABLE COLUMN TYPE INSERT INTO VALUES SELECT FROM WHERE DELETE LIKE STRINGTYPE INTTYPE DOUBLETYPE IN
 %token MAX MIN SUM AVG COUNT
 %token ALL COMMA SIQT OPBR CLBR SECL
-%token IDENTIFIER INTNUM DOUBLE
+%token <string> IDENTIFIER 
+%token <iValue> INTNUM 
+%token <dValue> DOUBLE
 
 %%
 
-sql:
-	|create_statement	{printf("Correct create statement\n");}
+sql_list:
+	sql
+	|sql sql_list
+	;
+
+sql:	
+	create_statement	{printf("Correct create statement\n");}
 	|insert_statement	{printf("Correct insert statement\n");}
 	|select_statement	{printf("Correct select statement\n");}
 	|delete_statement	{printf("Correct delete statement\n");}
@@ -30,11 +45,7 @@ create_statement:
 	;
 
 create_table:
-	CREATE TABLE table_name line_breaker
-	;
-
-line_breaker:
-	|SECL
+	CREATE TABLE table_name SECL
 	;
 
 table_name:
@@ -42,7 +53,7 @@ table_name:
 	;
 
 create_column:
-	CREATE COLUMN column_name column_type IN table_name line_breaker
+	CREATE COLUMN column_name column_type IN table_name SECL
 	;
 
 column_name:
@@ -50,13 +61,13 @@ column_name:
 	;
 
 column_type:
-	INTNUM
-	|DOUBLE
+	INTTYPE
+	|DOUBLETYPE
 	|string_type
 	;
 
 string_type:
-	STRING OPBR size CLBR
+	STRINGTYPE OPBR size CLBR
 	;
 
 size:
@@ -64,7 +75,8 @@ size:
 	;
 
 insert_statement:
-	INSERT INTO table_name column_comma_list VALUES value_comma_list line_breaker
+	INSERT INTO table_name column_comma_list VALUES value_comma_list SECL
+	|INSERT INTO table_name VALUES value_comma_list SECL
 	;
 
 column_comma_list:
@@ -96,14 +108,16 @@ value:
 	;
 
 select_statement:
-	SELECT ALL FROM table_name where_clause line_breaker
-	|SELECT column_comma_list FROM table_name where_clause line_breaker
-	|SELECT aggregate_function FROM table_name where_clause line_breaker
+	SELECT ALL FROM table_name SECL
+	|SELECT ALL FROM table_name where_clause SECL
+	|SELECT column_comma_list FROM table_name SECL
+	|SELECT column_comma_list FROM table_name where_clause SECL
+	|SELECT aggregate_function FROM table_name SECL
+	|SELECT aggregate_function FROM table_name where_clause SECL
 	;
 
 where_clause:
-	|WHERE where_condition
-	|WHERE where_clause where_condition
+	WHERE where_condition
 	;
 
 where_condition:
@@ -160,13 +174,14 @@ func_name:
 
 
 delete_statement:
-	DELETE column FROM table_name where_clause line_breaker
+	DELETE column FROM table_name SECL
+	|DELETE column FROM table_name where_clause SECL
 	;
 
 %%
 
 void yyerror(char *s) {
-	fprintf(stderr, "%s\n", s);
+	fprintf(stderr, "%s in line %d before column %d\n", s, yylineno, numchar);
 }
 
 int main(void) {
