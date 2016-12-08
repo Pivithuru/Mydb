@@ -1,18 +1,21 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
+#include "sqlhelper.h"
 %}
 
 %{
 extern int yylineno;
 extern int numchar;
 void yyerror(char *);
+extern void print_name(char *identifier);
 %}
 
 %union {
     int iValue;                 /* integer value */
     char *string;                /* symbol table index */
     double dvalue;				/* double value */
+    void *notype;
 }
 
 %left AND OR NOT
@@ -21,9 +24,12 @@ void yyerror(char *);
 %token CREATE TABLE COLUMN TYPE INSERT INTO VALUES SELECT FROM WHERE DELETE LIKE STRINGTYPE INTTYPE DOUBLETYPE IN
 %token MAX MIN SUM AVG COUNT
 %token ALL COMMA SIQT OPBR CLBR SECL
-%token <string> IDENTIFIER 
-%token <iValue> INTNUM 
+%token <string> IDENTIFIER
+%token <iValue> INTNUM
 %token <dValue> DOUBLE
+
+%type <string> table_name column_name column_type
+%type <notype> create_table create_column
 
 %%
 
@@ -32,7 +38,7 @@ sql_list:
 	|sql sql_list
 	;
 
-sql:	
+sql:
 	create_statement	{printf("Correct create statement\n");}
 	|insert_statement	{printf("Correct insert statement\n");}
 	|select_statement	{printf("Correct select statement\n");}
@@ -40,30 +46,30 @@ sql:
 	;
 
 create_statement:
-	create_table
+	create_table	{}
 	|create_column
 	;
 
 create_table:
-	CREATE TABLE table_name SECL
+	CREATE TABLE table_name SECL {create_table($3);}
 	;
 
 table_name:
-	IDENTIFIER
+	IDENTIFIER {$$=$1;}
 	;
 
 create_column:
-	CREATE COLUMN column_name column_type IN table_name SECL
+	CREATE COLUMN column_name column_type IN table_name SECL {create_column($3, $4, $6);}
 	;
 
 column_name:
-	IDENTIFIER
+	IDENTIFIER {$$=$1;}
 	;
 
 column_type:
-	INTTYPE
-	|DOUBLETYPE
-	|string_type
+	INTTYPE        {$$="INT";}
+	|DOUBLETYPE    {$$="DOUBLE";}
+	|string_type   {$$="STRING";}
 	;
 
 string_type:
@@ -89,7 +95,7 @@ column_list:
 	;
 
 column:
-	IDENTIFIER
+	IDENTIFIER 
 	;
 
 value_comma_list:
@@ -168,7 +174,7 @@ func_name:
 	MIN
 	|MAX
 	|SUM
-	|AVG	
+	|AVG
 	;
 
 
@@ -181,12 +187,10 @@ delete_statement:
 %%
 
 void yyerror(char *s) {
-	fprintf(stderr, "%s in line %d before column %d\n", s, yylineno, numchar);
+	fprintf(stderr, "%s in line %d column %d\n", s, yylineno, numchar);
 }
 
 int main(void) {
 	yyparse();
 	return 0;
 }
-
-

@@ -1,6 +1,7 @@
 %{
 #include <stdio.h>
-#include "y.tab.h"
+#include "sqly.h"
+#include "sqlhelper.h"
 
 void yyerror(char *);
 int numchar = 1;
@@ -49,7 +50,7 @@ count 					{printf("COUNT\n");numchar+=5;return COUNT;}
 "<="					{printf("LESS THAN OR EQUAL\n");numchar+=2;return LE;}
 "!="					{printf("NOT EQUAL\n");numchar+=2;return NE;}
 
-[A-Za-z][A-Za-z0-9_]*	{printf("IDENTIFIER\n");numchar+=yyleng;printf("%d\n",numchar);yylval.string = yytext;return IDENTIFIER;}
+[A-Za-z][A-Za-z0-9_]*	{printf("IDENTIFIER\n");numchar+=yyleng;printf("%s\n",yytext);yylval.string = strdup(yytext);return IDENTIFIER;}
 [0-9]+					{printf("INT\n");numchar+=yyleng;printf("%d\n",numchar);yylval.iValue = atoi(yytext);return INTNUM;}
 [0-9]+"."[0-9]* 		{printf("DOUBLE\n");numchar+=yyleng;printf("%d\n",numchar);yylval.iValue = atof(yytext);return DOUBLE;}
 

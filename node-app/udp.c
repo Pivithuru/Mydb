@@ -80,11 +80,40 @@
         puts(server_buffer);
         #include <stdio.h>
         #include <ctype.h>
+	#include <stdlib.h>
+	#include <string.h>
+
+	FILE *file = fopen("query", "w");
+
+	int results = fputs(server_buffer, file);
+	if (results == EOF) {
+	    // Failed to write do error code here.
+	}
+	fclose(file);
+	
+	FILE *in;
+	char buff[10];
+	char final[4096];
+	int size = 0;
+
+	if(!(in = popen("./sql < query", "r"))){
+		exit(1);
+	}
+	memset(&final[0], 0, sizeof(final));
+	while(fgets(buff, sizeof(buff), in)!=NULL){
+		size += sizeof(buff);		
+		printf("%s", buff);
+		strcat(final,buff);
+	}
+	printf("\n\nBuffer\n\n%s", final);
+
+/*
         for(int i=0;i<res;i++)
             server_buffer[i] = toupper(server_buffer[i]);
         server_buffer[res] = '\0';
         //printf("%s\n",server_buffer);
-        sendto(server_socket, server_buffer, res, 0, (struct sockaddr *)&src, sizeof(src));
+*/
+        sendto(server_socket, final, size, 0, (struct sockaddr *)&src, sizeof(src));
     }
 }
 return NULL;
@@ -124,10 +153,10 @@ static int udp_send(char *addr_str, char *port_str, char *data, unsigned int num
             printf("Success: send %u byte to %s:%u\n", (unsigned)data_len, addr_str, port);
         }
         int nBytes;
-        char server_data[data_len];
+        char server_data[4096];
         //size_t server_data_len = strlen(server_data);
 
-        if ((nBytes = recvfrom(s,server_data,data_len,0,NULL, NULL)) < 0) {
+        if ((nBytes = recvfrom(s,server_data,4096,0,NULL, NULL)) < 0) {
             puts("Error on receive");
             close(s);
         }

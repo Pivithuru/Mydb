@@ -1,0 +1,10 @@
+CREATE TABLE employee;
+INSERT INTO employee (id,name,no) VALUES(1,'Piyal',0779214362);
+INSERT INTO employee VALUES (1,'Piyal',0779214362);
+select * from employee;
+SELECT(id,name) FROM employee;
+SELECT max(id) FROM employee;
+SELECT(id,name) FROM employee WHERE name = 'Piyal' AND id = 5;
+SELECT max(id) FROM employee WHERE id > 3;
+create column id int in employee;
+create column name string(10) in employee;
