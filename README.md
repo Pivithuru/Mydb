@@ -1,7 +1,7 @@
 # Instructions for run the app
 
-Make executable file for lex and yacc \n
-1. >cd node-app/lex&yacc \n
+Make executable file for lex and yacc 
+1. >cd node-app/lex&yacc 
 2. >make
 
 create 2 tap interfaces
@@ -30,7 +30,7 @@ create server in a node
 send query from base-station
 
 9. Go to base-station
-10. >udp send <serverip> <serverport> "query"
+10. >udp send \<serverip\> \<serverport\> "query"
 	query must be include between two double quotes.
 
 
