@@ -6,7 +6,7 @@ Make executable file for lex and yacc
   
 create 2 tap interfaces  
 3. Go to RIOT/dist/tools/tapsetup  
-4. >./tapsetup -c 2  
+4. $ ./tapsetup -c 2  
   
 create server in a node  
 5. Go to node-app  
