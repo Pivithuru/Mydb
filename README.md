@@ -29,6 +29,6 @@ ip address of this node(server) is fe80::94a3:95ff:fed6:abd8 under scope: local 
 send query from base-station    
 9. Go to base-station  
 10. $ udp send \<serverip\> \<serverport\> "query"  
-	query must be include between two double quotes.  
+	query must be include between two double quotes.  (Sample queries included in node-app/lex&yacc/testquery.txt)
 
 
