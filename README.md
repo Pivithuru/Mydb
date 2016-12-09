@@ -1,8 +1,8 @@
 # Instructions for run the app
 
 Make executable file for lex and yacc   
-1. >cd node-app/lex&yacc  
-2. >make  
+1. $ cd node-app/lex&yacc  
+2. $ make  
   
 create 2 tap interfaces  
 3. Go to RIOT/dist/tools/tapsetup  
