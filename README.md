@@ -25,7 +25,7 @@ create server in a node
 	
 	ip address of this node(server) is fe80::94a3:95ff:fed6:abd8 under scope: local
 
-8. >udp server start <portnumber> ex:8080
+8. >udp server start \<portnumber\> ex:8080
 
 send query from base-station
 
