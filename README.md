@@ -23,7 +23,7 @@ create server in a node
            inet6 addr: fe80::94a3:95ff:fed6:abd8/64  scope: local 
            inet6 addr: ff02::1:ffd6:abd8/128  scope: local [multicast]
 	
-	ip address of this node(server) is fe80::94a3:95ff:fed6:abd8 under scope: local
+ip address of this node(server) is fe80::94a3:95ff:fed6:abd8 under scope: local
 
 8. >udp server start \<portnumber\> ex:8080
 
