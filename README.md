@@ -1,7 +1,7 @@
 # Instructions for run the app
 
-Make executable file for lex and yacc
-1. >cd node-app/lex&yacc
+Make executable file for lex and yacc \n
+1. >cd node-app/lex&yacc \n
 2. >make
 
 create 2 tap interfaces
